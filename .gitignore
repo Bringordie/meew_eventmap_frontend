@@ -13,3 +13,5 @@ web-report/
 # macOS
 .DS_Store
 .expo-shared/assets.json
+expo/.expo/README.md
+/settings.js
