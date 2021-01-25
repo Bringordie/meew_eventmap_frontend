@@ -1,6 +1,6 @@
 # Meew Frontend
 
-Link to [Backend](https://github.com/Bringordie/meew_assignment_backend)
+Link to [Backend](https://github.com/Bringordie/meew_eventmap_backend)
 
 ****Demo:****
 
