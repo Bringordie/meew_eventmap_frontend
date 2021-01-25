@@ -50,16 +50,21 @@ export const SERVER_URL = "BACKEND URL";
 ****Code files:****
 
 App.js
+
     - Main "app" file. Here is where the have our main View that leads to other components.
 
 GetLoginData.js
+
     - Component where you can login. Once a successfully login has been accomplished the events will be collected also.
 
 CreateEvent.js
+
     - Component for creating an event.
 
 serverFacade.js
+
     - Facade for all backend calls.
 
 settings.js
+
     - Contains the backend url that is used in serverFacade.
