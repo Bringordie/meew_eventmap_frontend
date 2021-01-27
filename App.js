@@ -14,6 +14,7 @@ import facade from "./serverFacade";
 import GetLoginData from "./GetLoginData";
 import CreateEvent from "./CreateEvent";
 import { StatusBar } from "expo-status-bar";
+import RegisterToEvent from "./RegisteToEvent";
 
 const MyButton = ({ txt, onPressButton }) => {
   return (
@@ -61,7 +62,7 @@ export default App = () => {
       longitude: location.coords.longitude,
     });
 
-    const house_number_name = result.address.house_number;
+    var house_number_name = result.address.house_number;
     const road_name = result.address.road;
     const postcode_name = result.address.postcode;
 
@@ -105,12 +106,18 @@ export default App = () => {
 
   const [showCreateEvent, setShowCreateEvent] = useState(false);
 
+  const [registerToEvent, setRegisterToEvent] = useState(false);
+
   const closeLoginDataDialog = () => {
     setShowLoginDialog(false);
   };
 
   const closeCreateEventDialog = () => {
     setShowCreateEvent(false);
+  };
+
+  const closeRegisterToEvent = () => {
+    setRegisterToEvent(false);
   };
 
   const updateEvents = useCallback(
@@ -179,6 +186,20 @@ export default App = () => {
                   <Text>Time: {marker.eventSchedule.substr(11, 5)}</Text>
                   <Text>Tickets available: {marker.ticketAmount} </Text>
                   <Text>Ticket price: {marker.ticketPrice}.- </Text>
+                  <MyButton
+                    style={{ flex: 2 }}
+                    onPressButton={() => setRegisterToEvent(true)}
+                    txt="Register to event"
+                  />
+                  {registerToEvent === true && (
+                    <RegisterToEvent
+                      visible={registerToEvent}
+                      address={address}
+                      marker={marker}
+                      onClose={closeRegisterToEvent}
+                      username={username}
+                    />
+                  )}
                 </View>
               </MapView.Callout>
             </MapView.Marker>

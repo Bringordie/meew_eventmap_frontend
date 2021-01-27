@@ -4,6 +4,7 @@ import { Base64 } from "js-base64";
 ServerFacade = () => {
   async function getEvents(username, password) {
     let headers = new Headers();
+    console.log();
     headers.set(
       "Authorization",
       //Basic Auth Login
@@ -38,6 +39,8 @@ ServerFacade = () => {
       return err;
     }
   }
+
+  async function registerToEvent() {}
 
   async function createEvent(username, eventInfo, date, time) {
     const headers = {
