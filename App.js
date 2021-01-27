@@ -14,6 +14,7 @@ import facade from "./serverFacade";
 import GetLoginData from "./GetLoginData";
 import CreateEvent from "./CreateEvent";
 import { StatusBar } from "expo-status-bar";
+import LoadingScreen from "./LoadingScreen";
 
 const MyButton = ({ txt, onPressButton }) => {
   return (
@@ -138,10 +139,8 @@ export default App = () => {
     : "Click on a location to see or create an event";
 
   return (
-    <View style={{ flex: 1, paddingTop: 20 }}>
-      {/* TODO real loading screen */}
-      {!region && <Text style={styles.fetching}>.. Fetching data</Text>}
-
+    <View style={{ flex: 1 }}>
+      {username != "" && !region && <LoadingScreen />}
       {region && position.longitude != undefined && (
         <MapView
           ref={mapRef}
