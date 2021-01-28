@@ -69,10 +69,35 @@ ServerFacade = () => {
     }
   }
 
+  async function registerUser(username, password) {
+    const headers = {
+      "Content-Type": "application/json",
+      accept: "application/json",
+    };
+
+    try {
+      const url = `${SERVER_URL}/api/users/`;
+      const body = {
+        userName: username,
+        password: password,
+      };
+      const status = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: headers,
+      }).then((res) => res.json());
+      return status;
+    } catch (err) {
+      console.log("error", err);
+      return err;
+    }
+  }
+
   return {
     getEvents,
     getAddressFromCoordinates,
     createEvent,
+    registerUser,
   };
 };
 

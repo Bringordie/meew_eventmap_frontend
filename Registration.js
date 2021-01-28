@@ -9,36 +9,34 @@ import {
   Text,
 } from "react-native";
 import facade from "./serverFacade";
-import Registration from "./Registration";
 
 export default function GetLoginData(props) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [showRegistrationDialog, setShowRegistrationDialog] = useState(false);
-  const { visible, onClose, setEvents, loggedUser } = props;
-
-  const closeRegistrationDialog = () => {
-    setShowRegistrationDialog(false);
-  };
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const { visible, onClose } = props;
 
   const submit = () => {
     const loginData = { userName, password };
-    loginAndGetEvents(loginData.userName, loginData.password);
+    if (password !== repeatPassword) {
+      Alert.alert("Password did not match. Please try again.");
+    } else {
+      registration(loginData);
+    }
   };
 
-  async function loginAndGetEvents(username, password) {
+  async function registration(loginData) {
     try {
       //Logging in and getting all events
-      const events = await facade.getEvents(username, password);
-      if (events == false) {
-        Alert.alert("Wrong password, please try again");
-      } else {
-        setEvents(events);
-        loggedUser(username);
-        setUserName("");
-        setPassword("");
-        Alert.alert("Successfully logged in");
-        onClose();
+      const response = await facade.registerUser(
+        loginData.userName,
+        loginData.password
+      );
+
+      if (response.code == 400) {
+        Alert.alert("Username already exists");
+      } else if (response.status == "User was added") {
+        Alert.alert("Account has successfull been created. You can now login.");
       }
     } catch (err) {
       const msg = `${JSON.stringify(err)}`;
@@ -49,7 +47,7 @@ export default function GetLoginData(props) {
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.inputContainer}>
-        <Text style={flattenStyle}>Login</Text>
+        <Text style={flattenStyle}>Registration</Text>
         <TextInput
           placeholder="Enter Username"
           value={userName}
@@ -63,20 +61,20 @@ export default function GetLoginData(props) {
           style={styles.input}
           onChangeText={(txt) => setPassword(txt)}
         />
+        <TextInput
+          placeholder="Repeat Password"
+          secureTextEntry={true}
+          value={repeatPassword}
+          style={styles.input}
+          onChangeText={(txt) => setRepeatPassword(txt)}
+        />
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
-            <Button title="LOGIN" onPress={submit} />
+            <Button title="REGISTER" onPress={submit} />
           </View>
           <View style={styles.button}>
-            <Button
-              title="REGISTER"
-              onPress={() => setShowRegistrationDialog(true)}
-            />
+            <Button title="LOGIN" onPress={() => onClose()} />
           </View>
-          <Registration
-            visible={showRegistrationDialog}
-            onClose={closeRegistrationDialog}
-          />
         </View>
       </View>
     </Modal>
