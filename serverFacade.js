@@ -29,6 +29,7 @@ ServerFacade = () => {
 
     try {
       const url = `${SERVER_URL}/geoaddress/converter/${lon}/${lat}`;
+      console.log(url)
       const status = await fetch(url, {
         method: "GET",
         headers: headers,

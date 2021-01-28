@@ -10,8 +10,8 @@ import {
 import facade from "./serverFacade";
 
 export default function GetLoginData(props) {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("Kurt");
+  const [password, setPassword] = useState("Wonnegut");
   const { visible, onClose, setEvents, loggedUser } = props;
 
   const submit = () => {

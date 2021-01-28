@@ -13,6 +13,7 @@ import Constants from "expo-constants";
 import facade from "./serverFacade";
 import GetLoginData from "./GetLoginData";
 import CreateEvent from "./CreateEvent";
+import ShowEvents from "./ShowEvents"
 import { StatusBar } from "expo-status-bar";
 
 const MyButton = ({ txt, onPressButton }) => {
@@ -101,9 +102,11 @@ export default App = () => {
     }
   };
 
-  const [showLoginDialog, setShowLoginDialog] = useState(true);
+  const [showLoginDialog, setShowLoginDialog] = useState(false); // Set to true to see login screen
 
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+
+  const [showAllEvents, setShowAllEvents] = useState(false);
 
   const closeLoginDataDialog = () => {
     setShowLoginDialog(false);
@@ -111,6 +114,10 @@ export default App = () => {
 
   const closeCreateEventDialog = () => {
     setShowCreateEvent(false);
+  };
+
+  const closeShowEventsDialog = () => {
+    setShowAllEvents(false);
   };
 
   const updateEvents = useCallback(
@@ -206,6 +213,20 @@ export default App = () => {
           />
         </>
       )}
+          <MyButton
+            style={{ flex: 2 }}
+            onPressButton={() => setShowAllEvents(true)}
+            txt="View All Events"
+            />
+      {showAllEvents === true && (
+          <ShowEvents
+            visible={showAllEvents}
+            events={events}
+            onClose={closeShowEventsDialog}
+          />
+      )}
+      {showAllEvents != true && (
+        <>
       <Button title="logout" onPress={() => setShowLoginDialog(true)} />
       <GetLoginData
         visible={showLoginDialog}
@@ -214,6 +235,8 @@ export default App = () => {
         loggedUser={setUsername}
       />
       <StatusBar style="auto" />
+      </>
+      )}
     </View>
   );
 };
