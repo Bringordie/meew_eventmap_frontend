@@ -72,7 +72,7 @@ export default function CreateEvent(props) {
       <ScrollView>
         <View style={styles.inputContainer}>
           <Text style={styles.titleText}>
-            {"Address"}
+            {marker.address}
             {"\n"}
           </Text>
 
