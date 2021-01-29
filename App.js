@@ -13,7 +13,7 @@ import Constants from "expo-constants";
 import facade from "./serverFacade";
 import GetLoginData from "./GetLoginData";
 import CreateEvent from "./CreateEvent";
-import ShowEvents from "./ShowEvents"
+import ShowEvents from "./ShowEvents";
 import { StatusBar } from "expo-status-bar";
 import LoadingScreen from "./LoadingScreen";
 
@@ -103,7 +103,7 @@ export default App = () => {
     }
   };
 
-  const [showLoginDialog, setShowLoginDialog] = useState(false); // Set to true to see login screen
+  const [showLoginDialog, setShowLoginDialog] = useState(true); // Set to true to see login screen
 
   const [showCreateEvent, setShowCreateEvent] = useState(false);
 
@@ -142,7 +142,7 @@ export default App = () => {
   }
 
   goToEvent = (latitude, longitude) => {
-    closeShowEventsDialog()
+    closeShowEventsDialog();
     mapRef.current.animateToRegion(
       {
         latitude,
@@ -151,8 +151,8 @@ export default App = () => {
         longitudeDelta: 0.04,
       },
       1000
-      );
-    };
+    );
+  };
 
   const info = userHasClicked
     ? `You clicked on: ${address.road} ${address.house_number}, ${address.postcode}`
@@ -167,7 +167,7 @@ export default App = () => {
           style={{ flex: 14 }}
           onPress={onMapPress}
           mapType="standard"
-          region={region}
+          //region={region}
         >
           {/*App MapView.Marker to show users current position*/}
           <MapView.Marker
@@ -224,30 +224,30 @@ export default App = () => {
           />
         </>
       )}
-          <MyButton
-            style={{ flex: 2 }}
-            onPressButton={() => setShowAllEvents(true)}
-            txt="View All Events"
-            />
+      <MyButton
+        style={{ flex: 2 }}
+        onPressButton={() => setShowAllEvents(true)}
+        txt="View All Events"
+      />
       {showAllEvents === true && (
-          <ShowEvents
-            visible={showAllEvents}
-            events={events}
-            onClose={closeShowEventsDialog}
-            goToEvent={goToEvent}
-          />
+        <ShowEvents
+          visible={showAllEvents}
+          events={events}
+          onClose={closeShowEventsDialog}
+          goToEvent={goToEvent}
+        />
       )}
       {showAllEvents != true && (
         <>
-      <Button title="logout" onPress={() => setShowLoginDialog(true)} />
-      <GetLoginData
-        visible={showLoginDialog}
-        setEvents={updateEvents}
-        onClose={closeLoginDataDialog}
-        loggedUser={setUsername}
-      />
-      <StatusBar style="auto" />
-      </>
+          <Button title="logout" onPress={() => setShowLoginDialog(true)} />
+          <GetLoginData
+            visible={showLoginDialog}
+            setEvents={updateEvents}
+            onClose={closeLoginDataDialog}
+            loggedUser={setUsername}
+          />
+          <StatusBar style="auto" />
+        </>
       )}
     </View>
   );
