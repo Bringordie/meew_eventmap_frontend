@@ -140,6 +140,19 @@ export default App = () => {
     setUserHasClicked(true);
   }
 
+  goToEvent = (latitude, longitude) => {
+    closeShowEventsDialog()
+    mapRef.current.animateToRegion(
+      {
+        latitude,
+        longitude,
+        latitudeDelta: 0.002,
+        longitudeDelta: 0.04,
+      },
+      1000
+      );
+    };
+
   const info = userHasClicked
     ? `You clicked on: ${address.road} ${address.house_number}, ${address.postcode}`
     : "Click on a location to see or create an event";
@@ -192,7 +205,6 @@ export default App = () => {
           ))}
         </MapView>
       )}
-
       <Text style={{ flex: 1, textAlign: "center", fontWeight: "bold" }}>
         Your location: {myPosition.road} {myPosition.house_number},{" "}
         {myPosition.postcode}
@@ -223,6 +235,7 @@ export default App = () => {
             visible={showAllEvents}
             events={events}
             onClose={closeShowEventsDialog}
+            goToEvent={goToEvent}
           />
       )}
       {showAllEvents != true && (
