@@ -13,6 +13,7 @@ import Constants from "expo-constants";
 import facade from "./serverFacade";
 import GetLoginData from "./GetLoginData";
 import CreateEvent from "./CreateEvent";
+import ShowEvents from "./ShowEvents"
 import { StatusBar } from "expo-status-bar";
 import LoadingScreen from "./LoadingScreen";
 
@@ -102,9 +103,11 @@ export default App = () => {
     }
   };
 
-  const [showLoginDialog, setShowLoginDialog] = useState(true);
+  const [showLoginDialog, setShowLoginDialog] = useState(false); // Set to true to see login screen
 
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+
+  const [showAllEvents, setShowAllEvents] = useState(false);
 
   const closeLoginDataDialog = () => {
     setShowLoginDialog(false);
@@ -112,6 +115,10 @@ export default App = () => {
 
   const closeCreateEventDialog = () => {
     setShowCreateEvent(false);
+  };
+
+  const closeShowEventsDialog = () => {
+    setShowAllEvents(false);
   };
 
   const updateEvents = useCallback(
@@ -133,6 +140,19 @@ export default App = () => {
     });
     setUserHasClicked(true);
   }
+
+  goToEvent = (latitude, longitude) => {
+    closeShowEventsDialog()
+    mapRef.current.animateToRegion(
+      {
+        latitude,
+        longitude,
+        latitudeDelta: 0.002,
+        longitudeDelta: 0.04,
+      },
+      1000
+      );
+    };
 
   const info = userHasClicked
     ? `You clicked on: ${address.road} ${address.house_number}, ${address.postcode}`
@@ -184,7 +204,6 @@ export default App = () => {
           ))}
         </MapView>
       )}
-
       <Text style={{ flex: 1, textAlign: "center", fontWeight: "bold" }}>
         Your location: {myPosition.road} {myPosition.house_number},{" "}
         {myPosition.postcode}
@@ -205,6 +224,21 @@ export default App = () => {
           />
         </>
       )}
+          <MyButton
+            style={{ flex: 2 }}
+            onPressButton={() => setShowAllEvents(true)}
+            txt="View All Events"
+            />
+      {showAllEvents === true && (
+          <ShowEvents
+            visible={showAllEvents}
+            events={events}
+            onClose={closeShowEventsDialog}
+            goToEvent={goToEvent}
+          />
+      )}
+      {showAllEvents != true && (
+        <>
       <Button title="logout" onPress={() => setShowLoginDialog(true)} />
       <GetLoginData
         visible={showLoginDialog}
@@ -213,6 +247,8 @@ export default App = () => {
         loggedUser={setUsername}
       />
       <StatusBar style="auto" />
+      </>
+      )}
     </View>
   );
 };
