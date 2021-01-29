@@ -16,6 +16,7 @@ import CreateEvent from "./CreateEvent";
 import ShowEvents from "./ShowEvents";
 import { StatusBar } from "expo-status-bar";
 import LoadingScreen from "./LoadingScreen";
+import RegisterToEvent from "./RegisteToEvent";
 
 const MyButton = ({ txt, onPressButton }) => {
   return (
@@ -63,7 +64,7 @@ export default App = () => {
       longitude: location.coords.longitude,
     });
 
-    const house_number_name = result.address.house_number;
+    var house_number_name = result.address.house_number;
     const road_name = result.address.road;
     const postcode_name = result.address.postcode;
 
@@ -108,6 +109,7 @@ export default App = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   const [showAllEvents, setShowAllEvents] = useState(false);
+  const [registerToEvent, setRegisterToEvent] = useState(false);
 
   const closeLoginDataDialog = () => {
     setShowLoginDialog(false);
@@ -119,6 +121,10 @@ export default App = () => {
 
   const closeShowEventsDialog = () => {
     setShowAllEvents(false);
+  };
+
+  const closeRegisterToEvent = () => {
+    setRegisterToEvent(false);
   };
 
   const updateEvents = useCallback(
@@ -198,6 +204,20 @@ export default App = () => {
                   <Text>Time: {marker.eventSchedule.substr(11, 5)}</Text>
                   <Text>Tickets available: {marker.ticketAmount} </Text>
                   <Text>Ticket price: {marker.ticketPrice}.- </Text>
+                  <MyButton
+                    style={{ flex: 2 }}
+                    onPressButton={() => setRegisterToEvent(true)}
+                    txt="Register to event"
+                  />
+                  {registerToEvent === true && (
+                    <RegisterToEvent
+                      visible={registerToEvent}
+                      address={address}
+                      marker={marker}
+                      onClose={closeRegisterToEvent}
+                      username={username}
+                    />
+                  )}
                 </View>
               </MapView.Callout>
             </MapView.Marker>
