@@ -40,7 +40,39 @@ ServerFacade = () => {
     }
   }
 
-  async function registerToEvent() {}
+  async function registerToEvent(eventInfo, username, ticketsBought) {
+    const headers = {
+      "Content-Type": "application/json",
+      accept: "application/json",
+    };
+
+    try {
+      const url = `${SERVER_URL}/api/users/join/events`;
+      const body = {
+        user: username,
+        road: eventInfo.streetName,
+        house_number: eventInfo.streetNumber,
+        postcode: eventInfo.cityCode,
+        event_name: eventInfo.eventName,
+        ticket_amount: Number(ticketsBought),
+        ticket_price: Number(eventInfo.ticketPrice),
+        date_time:
+          eventInfo.eventSchedule.substr(0, 10) +
+          " " +
+          eventInfo.eventSchedule.substr(11, 5),
+        eventID: eventInfo._id,
+      };
+      const status = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: headers,
+      }).then((res) => res.json());
+      return status;
+    } catch (err) {
+      console.log("error", err);
+      return err;
+    }
+  }
 
   async function createEvent(username, eventInfo, date, time) {
     const headers = {
@@ -76,6 +108,7 @@ ServerFacade = () => {
     getEvents,
     getAddressFromCoordinates,
     createEvent,
+    registerToEvent,
   };
 };
 

@@ -12,10 +12,9 @@ import {
 import facade from "./serverFacade";
 
 export default function CreateEvent(props) {
-  const { visible, onClose, address, marker } = props;
+  const { visible, onClose, address, marker, username } = props;
 
   useEffect(() => {
-    //TODO should check for the users position if an address on the map isn't selected
     if (props.address) {
       let onClickEventData = {
         streetName: address.road,
@@ -34,36 +33,24 @@ export default function CreateEvent(props) {
     setCreateEvent({ ...createEvent, [id]: value });
   }
 
-  const submit = () => {
-    if (createEvent.ticketAmount < marker.ticketAmount) {
-      Alert.alert(createEvent.ticketAmount, " Tickets Bought");
-      marker.ticketAmount - createEvent.ticketAmount;
-    }
+  const submit = async () => {
+    await joinEvent();
+    marker.ticketAmount - createEvent.ticketAmount;
   };
 
-  async function createEventPost(username, eventInfo, date, time) {
-    try {
-      const eventResponse = await facade.createEvent(
-        username,
-        eventInfo,
-        date,
-        time
-      );
-      if (eventResponse == "Event was created") {
-        Alert.alert(`Event has been created.`);
-        let blankEvent = {
-          streetName: "",
-          streetNumber: "",
-          cityCode: "",
-          eventName: "",
-          ticketAmount: "",
-          ticketPrice: "",
-        };
-        setCreateEvent({ ...blankEvent });
-      }
-    } catch (err) {
-      const msg = `${JSON.stringify(err)}`;
-      Alert.alert("Something went wrong", msg);
+  async function joinEvent() {
+    const responseToJoinEvent = await facade.registerToEvent(
+      marker,
+      username,
+      createEvent.ticketAmount
+    );
+
+    if (responseToJoinEvent.joinEvent === "Tickets out of stock") {
+      Alert.alert("Insufficient amount of tickets in stock");
+    } else if (responseToJoinEvent.joinEvent === "Event Updated!") {
+      Alert.alert(createEvent.ticketAmount + " Tickets Bought");
+    } else {
+      Alert.alert(JSON.stringify("Error: " + responseToJoinEvent));
     }
   }
 
